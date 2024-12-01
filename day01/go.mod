@@ -1,3 +1,3 @@
-module github.com/Keyruu/advent-of-code-2024/day01
+module day01
 
 go 1.23.3
