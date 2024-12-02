@@ -18,47 +18,9 @@ func Part1(scanner *bufio.Scanner) string {
 	for scanner.Scan() {
 		line := scanner.Text()
 		split := strings.Split(line, " ")
-		last := -1
-		isSafe := true
-		increasing := true
-		for i, levelStr := range split {
-			level, err := strconv.Atoi(levelStr)
-			common.Check(err)
-			fmt.Printf("last: %d, level: %d\n", last, level)
-			if i == 0 {
-				last = level
-				continue
-			}
 
-			if last == level {
-				isSafe = false
-				break
-			}
-
-			if i == 1 {
-				if last > level {
-					increasing = false
-				}
-			}
-
-			if increasing {
-				if last > level || level-last > 3 {
-					isSafe = false
-					break
-				}
-			} else {
-				if last < level || last-level > 3 {
-					isSafe = false
-					break
-				}
-			}
-
-			last = level
-		}
-
-		if isSafe {
+		if isSafe(split) {
 			total += 1
-			fmt.Println("is safe")
 		}
 	}
 	return strconv.Itoa(total)
@@ -66,86 +28,81 @@ func Part1(scanner *bufio.Scanner) string {
 
 func Part2(scanner *bufio.Scanner) string {
 	total := 0
-	wrongOnes := [][]string{}
 	for scanner.Scan() {
 		line := scanner.Text()
 		split := strings.Split(line, " ")
 
-		if isSafe(0, split, true) {
+		if isSafe(split) {
 			total += 1
-			fmt.Println("is safe")
 		} else {
-			wrongOnes = append(wrongOnes, split)
-		}
-	}
-	for _, wrong := range wrongOnes {
-		if isSafe(1, wrong, false) {
-			total += 1
-			fmt.Println("is safe now")
+			for i := 0; i < len(split); i++ {
+				removed, err := remove(split, i)
+				common.Check(err)
+				if isSafe(removed) {
+					total += 1
+					break
+				}
+			}
 		}
 	}
 	return strconv.Itoa(total)
 }
 
-func isSafe(startAt int, numbers []string, secondChances bool) bool {
-	lastIncreasing := -1
-	lastDecreasing := -1
-	isSafeIncreasing := true
-	isSafeDecreasing := true
-	secondChanceIncreasing := secondChances
-	secondChanceDecreasing := secondChances
-	for i, levelStr := range numbers[startAt:] {
+func isSafe(numbers []string) bool {
+	last := -1
+	isSafe := true
+	increasing := true
+	for i, levelStr := range numbers {
 		level, err := strconv.Atoi(levelStr)
 		common.Check(err)
-
-		fmt.Printf("Index: %d, Current level: %d, LastInc: %d, LastDec: %d\n",
-			i, level, lastIncreasing, lastDecreasing)
-
 		if i == 0 {
-			lastDecreasing = level
-			lastIncreasing = level
+			last = level
 			continue
 		}
 
-		skipIncreasing := false
-		skipDecreasing := false
-		if isIncreasing(lastIncreasing, level) == false && isSafeIncreasing {
-			if secondChanceIncreasing {
-				secondChanceIncreasing = false
-				skipIncreasing = true
-				fmt.Printf("Used increasing second chance at index %d\n", i)
-			} else {
-				isSafeIncreasing = false
-				fmt.Printf("No longer safe increasing at index %d\n", i)
-			}
-		}
-		if isDecreasing(lastDecreasing, level) == false && isSafeDecreasing {
-			if secondChanceDecreasing {
-				secondChanceDecreasing = false
-				skipDecreasing = true
-				fmt.Printf("Used decreasing second chance at index %d\n", i)
-			} else {
-				isSafeDecreasing = false
-				fmt.Printf("No longer safe decreasing at index %d\n", i)
-			}
-		}
-
-		if skipDecreasing == false {
-			lastDecreasing = level
-		}
-		if skipIncreasing == false {
-			lastIncreasing = level
-		}
-
-		fmt.Printf("After processing - SafeInc: %v, SafeDec: %v, SecondChanceInc: %v, SecondChanceDec: %v\n",
-			isSafeIncreasing, isSafeDecreasing, secondChanceIncreasing, secondChanceDecreasing)
-
-		if isSafeDecreasing == false && isSafeIncreasing == false {
-			fmt.Println("Breaking loop - both sequences invalid")
+		if last == level {
+			isSafe = false
 			break
 		}
+
+		if i == 1 {
+			if last > level {
+				increasing = false
+			}
+		}
+
+		if increasing {
+			if last > level || level-last > 3 {
+				isSafe = false
+				break
+			}
+		} else {
+			if last < level || last-level > 3 {
+				isSafe = false
+				break
+			}
+		}
+
+		last = level
 	}
-	return isSafeDecreasing || isSafeIncreasing
+
+	return isSafe
+}
+
+func remove[T any](slice []T, index int) ([]T, error) {
+	// Check if index is valid
+	if index < 0 || index >= len(slice) {
+		return slice, fmt.Errorf("index %d out of range", index)
+	}
+
+	// Create a new slice with same length as original
+	result := make([]T, 0, len(slice)-1)
+
+	// Copy all elements except the one at index
+	result = append(result, slice[:index]...)
+	result = append(result, slice[index+1:]...)
+
+	return result, nil
 }
 
 func isIncreasing(last int, level int) bool {
