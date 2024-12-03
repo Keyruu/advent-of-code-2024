@@ -24,7 +24,11 @@ func Solve(part func(*bufio.Scanner) string) {
 }
 
 func Test(t *testing.T, expected string, part func(*bufio.Scanner) string) {
-	file, err := os.Open("./example.txt")
+	TestWithPath(t, expected, part, "example.txt")
+}
+
+func TestWithPath(t *testing.T, expected string, part func(*bufio.Scanner) string, path string) {
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}

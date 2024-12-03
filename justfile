@@ -5,7 +5,7 @@ default:
   just --list
 
 new day=currentDay:
-  cp template/ day{{day}}
+  cp -R template/ day{{day}}/
   sed -i '' 's/dayxx/day{{day}}/g' day{{day}}/go.mod
   go work use day{{day}}
 
