@@ -9,7 +9,7 @@ import (
 )
 
 func Solve(part func(*bufio.Scanner) string) {
-	file, err := os.Open("./.input.txt")
+	file, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}

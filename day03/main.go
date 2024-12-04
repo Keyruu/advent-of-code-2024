@@ -101,14 +101,12 @@ func Part2(scanner *bufio.Scanner) string {
 		data = data[:dont] + data[doAbsolutePos+4:]
 	}
 
-	res, last := mul(data)
-	data = data[last+1:]
-	total += res
-
+	last := 0
 	for last != -1 {
+		data = data[last:]
+		res := 0
 		res, last = mul(data)
 		total += res
-		data = data[last+1:]
 	}
 
 	return strconv.Itoa(total)

@@ -5,9 +5,18 @@ default:
   just --list
 
 new day=currentDay:
-  cp -R template/ day{{day}}/
-  sed -i '' 's/dayxx/day{{day}}/g' day{{day}}/go.mod
+  cp -r template/ day{{day}}
+  sed -i '' "1s/.*/module day{{day}}/" day{{day}}/go.mod
   go work use day{{day}}
+
+fetch day=currentDay:
+    #!/usr/bin/env bash
+    if [ ! -f .env ]; then
+        echo "Please create .env file with AOC_SESSION=your_session_cookie"
+        exit 1
+    fi
+    source .env
+    curl --cookie "session=$AOC_SESSION" "https://adventofcode.com/2024/day/$(echo {{day}} | sed 's/^0*//')/input" > "day{{day}}/input.txt"
 
 test day=currentDay:
   go test day{{day}}
