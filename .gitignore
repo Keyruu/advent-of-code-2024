@@ -1,7 +1,5 @@
 input.txt
 .env
 
-*.beam
-*.ez
-/build
-erl_crash.dump
+.bsp
+.scala-build

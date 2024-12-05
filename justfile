@@ -6,7 +6,6 @@ default:
 
 new day=currentDay:
   cp -r template/ day{{day}}
-  sed -i '' "1s/.*/module day{{day}}/" day{{day}}/go.mod
   go work use day{{day}}
 
 fetch day=currentDay:
