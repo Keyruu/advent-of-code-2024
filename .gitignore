@@ -1,5 +1,6 @@
-input.txt
+*.txt
 .env
 
 .bsp
 .scala-build
+.metals

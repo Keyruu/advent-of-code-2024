@@ -43,9 +43,9 @@ func Part1(scanner *bufio.Scanner) string {
 				page, err := strconv.Atoi(string(char))
 				common.Check(err)
 
-				beforePages := beforeMap[page]
+				afterPages := beforeMap[page]
 				for _, before := range beforeArr {
-					if slices.Contains(beforePages, before) {
+					if slices.Contains(afterPages, before) {
 						correct = false
 						break
 					}
@@ -123,9 +123,9 @@ func Part2(scanner *bufio.Scanner) string {
 					rightInt, err := strconv.Atoi(right)
 					common.Check(err)
 
-					leftBeforePages := beforeMap[leftInt]
+					leftAfterPages := beforeMap[leftInt]
 
-					if slices.Contains(leftBeforePages, rightInt) {
+					if slices.Contains(leftAfterPages, rightInt) {
 						return -1
 					} else {
 						return 1

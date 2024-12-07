@@ -23,5 +23,11 @@ test day=currentDay:
 run day=currentDay:
   cd day{{day}}; go run main.go
 
+scala-test day=currentDay:
+  scala test main.test.scala
+
+scala-run day=currentDay:
+  cd day{{day}}; scala run main.scala
+
 benchmark day=currentDay:
   go test day{{day}} -bench=.
