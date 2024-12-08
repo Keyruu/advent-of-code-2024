@@ -5,7 +5,7 @@ import scala.util.boundary
 
 @main
 def part1(path: String): String =
-  val input = os.read(os.pwd / "inputs" / s"$path.txt")
+  val input = os.read(os.pwd / "inputs" / "$path.txt")
   val lines = input.split("\n")
   val operators = Array("+", "*")
 
@@ -27,7 +27,7 @@ def part1(path: String): String =
 
 @main
 def part2(path: String): String =
-  val input = os.read(os.pwd / "inputs" / s"$path.txt")
+  val input = os.read(os.pwd / "inputs" / "$path.txt")
   val lines = input.split("\n")
   val operators = Array("+", "*", "||")
 

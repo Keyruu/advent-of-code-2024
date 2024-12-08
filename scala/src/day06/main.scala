@@ -11,7 +11,7 @@ import upack.Arr
 
 @main
 def part1(path: String): String =
-  val input = os.read(os.pwd / "inputs" / s"$path.txt")
+  val input = os.read(os.pwd / "inputs" / "$path.txt")
 
   var start = Route(0, 0, Direction.Up)
   val lines = input.split("\n")
@@ -45,7 +45,7 @@ def part1(path: String): String =
 
 @main
 def part2(path: String): String =
-  val input = os.read(os.pwd / "inputs" / s"$path.txt")
+  val input = os.read(os.pwd / "inputs" / "$path.txt")
 
   var start = Route(0, 0, Direction.Up)
   val lines = input.split("\n")

@@ -11,8 +11,9 @@ run part day=currentDay:
   scala-cli . -M day{{day}}.part{{part}} -- day{{day}}.input
 
 new day=currentDay:
-  cat template/dayXX.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}.scala
-  cat template/dayXX.test.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}.test.scala
+  mkdir src/day{{day}}
+  cat template/dayXX.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}/day{{day}}.scala
+  cat template/dayXX.test.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}/day{{day}}.test.scala
   touch inputs/day{{day}}.example.txt
 
 fetch day=currentDay:
@@ -24,3 +25,10 @@ fetch day=currentDay:
     source .env
     curl --cookie "session=$AOC_SESSION" "https://adventofcode.com/2024/day/$(echo {{day}} | sed 's/^0*//')/input" > "inputs/day{{day}}.input.txt"
 
+benchmark day=currentDay:
+  scala-cli --power package --native-image src/day{{day}}/main.scala -o .bin/day{{day}}part1 --toolkit 0.6.0 --main-class day{{day}}.part1
+  scala-cli --power package --native-image src/day{{day}}/main.scala -o .bin/day{{day}}part2 --toolkit 0.6.0 --main-class day{{day}}.part2
+  hyperfine --warmup 3 ".bin/day{{day}}part1 day{{day}}.input" ".bin/day{{day}}part2 day{{day}}.input" -N --export-markdown src/day{{day}}/README.md
+
+clean-bin:
+  rm -rf .bin/*

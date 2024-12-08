@@ -6,7 +6,7 @@ import scala.util.boundary
 
 @main
 def part1(path: String): String =
-  val input = os.read(os.pwd / "inputs" / s"$path.txt")
+  val input = os.read(os.pwd / "inputs" / "$path.txt")
   val grid = input.split("\n").map(_.split(""))
   val map: Map[String, Array[Position]] = grid.zipWithIndex
     .flatMap { case (line, i) =>
@@ -75,7 +75,7 @@ case class Position(val x: Int, val y: Int)
 
 @main
 def part2(path: String): String =
-  val input = os.read(os.pwd / "inputs" / s"$path.txt")
+  val input = os.read(os.pwd / "inputs" / "$path.txt")
   val grid = input.split("\n").map(_.split(""))
   val map: Map[String, Array[Position]] = grid.zipWithIndex
     .flatMap { case (line, i) =>

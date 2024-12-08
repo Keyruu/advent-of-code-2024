@@ -1,5 +1,6 @@
 *.txt
 .env
+.bin
 
 .bsp
 .scala-build
