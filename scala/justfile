@@ -1,0 +1,26 @@
+currentDay := shell("date '+%d'")
+
+[private]
+default:
+  just --list
+
+test day=currentDay:
+  scala-cli test . --test-only day{{day}}.Test
+
+run part day=currentDay:
+  scala-cli . -M day{{day}}.part{{part}} -- day{{day}}.input
+
+new day=currentDay:
+  cat template/dayXX.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}.scala
+  cat template/dayXX.test.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}.test.scala
+  touch inputs/day{{day}}.example.txt
+
+fetch day=currentDay:
+    #!/usr/bin/env bash
+    if [ ! -f .env ]; then
+        echo "Please create .env file with AOC_SESSION=your_session_cookie"
+        exit 1
+    fi
+    source .env
+    curl --cookie "session=$AOC_SESSION" "https://adventofcode.com/2024/day/$(echo {{day}} | sed 's/^0*//')/input" > "inputs/day{{day}}.input.txt"
+
