@@ -23,25 +23,16 @@ def part1(path: String): String =
     }
   }.toSet
 
-  var antinodes = mutable.Set.empty[Position]
-  val result = pairs.foldLeft(0) { case (acc, (pos1, pos2)) =>
-    var count = 0
-    calculateDistance(grid, pos1, pos2).foreach { pos =>
-      if !antinodes.contains(pos) then
-        antinodes.add(pos)
-        count += 1
+  val antinodes: Set[Position] = pairs
+    .foldLeft(mutable.Set.empty[Position]) { case (acc, (pos1, pos2)) =>
+      calculateDistance(grid, pos1, pos2).foreach(acc.add(_))
+      calculateDistance(grid, pos2, pos1).foreach(acc.add(_))
+      acc
     }
-    calculateDistance(grid, pos2, pos1).foreach { pos =>
-      if !antinodes.contains(pos) then
-        antinodes.add(pos)
-        count += 1
-    }
+    .toSet
 
-    acc + count
-  }
-
-  println(s"Result: $result")
-  return result.toString()
+  println(s"Result: ${antinodes.size}")
+  return antinodes.size.toString()
 
 def calculateDistance(
     grid: Array[Array[String]],
@@ -101,32 +92,15 @@ def part2(path: String): String =
     }
   }.toSet
 
-  var antinodes = mutable.Set.empty[Position]
-  val result = pairs.foldLeft(0) { case (acc, (pos1, pos2)) =>
-    var count = 0
-    if !antinodes.contains(pos1) then
-      antinodes.add(pos1)
-      count += 1
-
-    if !antinodes.contains(pos2) then
-      antinodes.add(pos2)
-      count += 1
-
-    calculateLine(grid, pos1, pos2).foreach { pos =>
-      if !antinodes.contains(pos) then
-        antinodes.add(pos)
-        println(pos)
-        count += 1
+  val antinodes: Set[Position] = pairs
+    .foldLeft(mutable.Set.empty[Position]) { case (acc, (pos1, pos2)) =>
+      acc.add(pos1)
+      acc.add(pos2)
+      calculateLine(grid, pos1, pos2).foreach(acc.add(_))
+      calculateLine(grid, pos2, pos1).foreach(acc.add(_))
+      acc
     }
-    calculateLine(grid, pos2, pos1).foreach { pos =>
-      if !antinodes.contains(pos) then
-        antinodes.add(pos)
-        println(pos)
-        count += 1
-    }
+    .toSet
 
-    acc + count
-  }
-
-  println(s"Result: $result")
-  return result.toString()
+  println(s"Result: ${antinodes.size}")
+  return antinodes.size.toString()
