@@ -1,4 +1,4 @@
-package day06
+package day07
 
 class Test extends munit.FunSuite:
   test("part 1"):
