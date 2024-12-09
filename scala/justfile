@@ -12,8 +12,8 @@ run part day=currentDay:
 
 new day=currentDay:
   mkdir src/day{{day}}
-  cat template/dayXX.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}/day{{day}}.scala
-  cat template/dayXX.test.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}/day{{day}}.test.scala
+  cat template/main.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}/main.scala
+  cat template/main.test.scala | sed 's/dayXX/day{{day}}/g' > src/day{{day}}/main.test.scala
   touch inputs/day{{day}}.example.txt
 
 fetch day=currentDay:
