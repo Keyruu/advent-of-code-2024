@@ -53,7 +53,7 @@ def findTrailheads(grid: Grid): Seq[Position] =
 def calculateTrailheadScore(grid: Grid, start: Position): Int =
   def findNines(): Set[Position] =
     var visited = Set.empty[Position]
-    var queue = List((start, 0)) // (position, current height)
+    var queue = List((start, 0))
     var reachableNines = Set.empty[Position]
 
     while queue.nonEmpty do
@@ -93,7 +93,6 @@ def calculateTrailheadRating(grid: Grid, start: Position): Int =
         countPaths(next, currentHeight + 1, visited + current)
       }.sum
 
-  // Start counting paths from the trailhead
   countPaths(start, 0, Set.empty)
 
 @main

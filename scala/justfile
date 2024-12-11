@@ -26,9 +26,12 @@ fetch day=currentDay:
     curl --cookie "session=$AOC_SESSION" "https://adventofcode.com/2024/day/$(echo {{day}} | sed 's/^0*//')/input" > "inputs/day{{day}}.input.txt"
 
 benchmark day=currentDay:
-  scala-cli --power package --native-image src/day{{day}}/main.scala -o .bin/day{{day}}part1 --toolkit 0.6.0 --main-class day{{day}}.part1
-  scala-cli --power package --native-image src/day{{day}}/main.scala -o .bin/day{{day}}part2 --toolkit 0.6.0 --main-class day{{day}}.part2
+  scala-cli --power package --native-image src/day{{day}}/main.scala -o .bin/day{{day}}part1 --toolkit 0.6.0 --main-class day{{day}}.part1 -f
+  scala-cli --power package --native-image src/day{{day}}/main.scala -o .bin/day{{day}}part2 --toolkit 0.6.0 --main-class day{{day}}.part2 -f
   hyperfine --warmup 3 ".bin/day{{day}}part1 day{{day}}.input" ".bin/day{{day}}part2 day{{day}}.input" -N --export-markdown src/day{{day}}/README.md
+
+graph day=currentDay:
+  ./graph.sh {{day}}
 
 clean-bin:
   rm -rf .bin/*
