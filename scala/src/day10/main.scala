@@ -37,7 +37,7 @@ case class Grid(cells: Vector[Vector[Int]]):
     else None
 
   def isValid(pos: Position): Boolean =
-    pos.x >= 0 && pos.y < rows && pos.y >= 0 && pos.y < cols
+    pos.x >= 0 && pos.x < rows && pos.y >= 0 && pos.y < cols
 
 def parseInput(input: String): Grid =
   val lines = input.trim.split("\n")

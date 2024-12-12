@@ -15,10 +15,8 @@ def part1(path: String): String =
       val target = split(0).toLong
       val equation = split(1).split(" ").map(_.toLong)
 
-      tryOperators(target, equation, operators) match {
-        case Some(result) => result
-        case None         => 0
-      }
+      if tryOperators(target, equation, operators) then target
+      else 0
     )
     .reduce((a, b) => a + b)
 
@@ -37,10 +35,8 @@ def part2(path: String): String =
       val target = split(0).toLong
       val equation = split(1).split(" ").map(_.toLong)
 
-      tryOperators(target, equation, operators) match {
-        case Some(result) => result
-        case None         => 0
-      }
+      if tryOperators(target, equation, operators) then target
+      else 0
     )
     .reduce((a, b) => a + b)
 
@@ -51,29 +47,32 @@ def tryOperators(
     target: Long,
     equation: Array[Long],
     operators: Array[String]
-): Option[Long] =
+): Boolean =
+  def evaluate(tryOps: Array[String]): Long =
+    var result = equation(0)
+    for (op, i) <- tryOps.zipWithIndex do
+      val num = equation(i + 1)
+      op match {
+        case "+"  => result += num
+        case "*"  => result *= num
+        case "||" => result = result.toString.concat(num.toString).toLong
+      }
 
-  val operatorCombinations = List
-    .fill(equation.length - 1)(operators)
-    .foldLeft(List(List.empty[String])) { (acc, ops) =>
-      for {
-        existing <- acc
-        op <- ops
-      } yield existing :+ op
+    result
+
+  def tryOperations(pos: Int, ops: Array[String]): Boolean =
+    if (pos == equation.length - 1) {
+      return evaluate(ops.toArray) == target
     }
 
-  operatorCombinations.find { ops =>
-    val result = ops
-      .zip(equation.tail)
-      .foldLeft(equation.head) { case (acc, (op, num)) =>
-        op match {
-          case "+"  => acc + num
-          case "*"  => acc * num
-          case "||" => acc.toString.concat(num.toString).toLong
-        }
-      }
-    result == target
-  } match {
-    case Some(_) => Some(target)
-    case None    => None
-  }
+    boundary {
+      for op <- operators do
+        ops(pos) = op
+        if (tryOperations(pos + 1, ops)) boundary.break(true)
+    } match {
+      case true => return true
+      case _    => return false
+    }
+
+  val operations = new Array[String](equation.length - 1)
+  tryOperations(0, operations)
